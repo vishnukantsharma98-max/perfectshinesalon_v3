@@ -1,0 +1,6 @@
+{
+  "name": "Luméa Studio — Master Salon System",
+  "description": "Production-ready, data-driven master template and design system for luxury salons, beauty studios, and local wellness businesses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

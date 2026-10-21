@@ -1,0 +1,612 @@
+# PERFECT SHINE UNISEX SALON — COMPLETE UI, INTERACTION, ANIMATION & RESPONSIVE FIX
+
+Act as a senior frontend engineer, interaction designer, animation specialist, and responsive UI expert. Work directly inside my existing Perfect Shine Unisex Salon application in Google AI Studio.
+
+This is an implementation task, not a request for recommendations. Inspect the existing source code, identify the actual causes of the problems, implement the fixes, run the application, and verify the results.
+
+## PROJECT REFERENCE
+
+Live website:
+https://perfectshine-salon.vercel.app/
+
+Use the existing application and the screenshots provided with this request as the primary references for the affected components and observed issues.
+
+The goal is to make the existing application feel polished, fluid, responsive, premium, and genuinely interactive, with refined spring animations inspired by the tactile motion of OnePlus ColorOS and a floating glass navigation dock inspired by Apple Music.
+
+Do not blindly copy another application's UI. Create a cohesive design that fits the existing Perfect Shine Salon brand, layout, content, and pink/red accent color.
+
+## 1. NON-NEGOTIABLE IMPLEMENTATION RULES
+
+Before editing anything:
+
+1. Inspect the existing project structure, framework, routing, shared components, styling system, animation dependencies, carousel implementation, responsive breakpoints, and current event handlers.
+2. Identify the root cause of every issue described below.
+3. Reuse and improve existing components wherever practical.
+4. Preserve all existing service names, descriptions, prices, durations, images, salon details, telephone numbers, WhatsApp destinations, booking workflows, navigation routes, integrations, and other working functionality.
+5. Do not replace the application with a new project, generic template, static mockup, or simplified redesign.
+6. Do not remove existing sections or invent business information, reviews, prices, contact details, or external links.
+7. Do not introduce unnecessary dependencies or heavyweight animation libraries. Use the animation and carousel libraries already installed when appropriate. If none are installed, prefer lightweight CSS animations and native browser APIs.
+8. Keep the application performant on ordinary Android phones, tablets, laptops, and desktop computers.
+9. Keep the existing brand identity recognizable. Use restrained pink/red accents, elegant typography, clean white backgrounds, fine borders, refined shadows, and subtle glass effects.
+10. Do not stop after describing a plan. Implement the changes and verify them in the running application.
+
+Treat the screenshots as evidence of specific functional and visual problems, not as permission to rebuild unrelated areas.
+
+---
+
+## 2. FIX THE SERVICES CATEGORY FILTER AND SCROLL SYNCHRONIZATION
+
+This is a high-priority functional issue.
+
+### Current problem
+
+When I scroll down the Services page to the Colour section, the upper category filter sometimes remains stuck on Hair Cut. Hair Wash, Colour, Treatments, and other active categories do not update reliably.
+
+The filter behaves like a static row instead of reflecting the section currently visible on the screen.
+
+### Required behavior
+
+Implement reliable, bidirectional synchronization between the horizontal filter bar and the actual service sections.
+
+The existing categories include:
+
+- All
+- Hair Cut
+- Hair Wash
+- Colour
+- Treatments
+- Texture
+- Kérastase Rituals
+- Styling
+
+Preserve the application's actual existing category names and service data.
+
+**A. Scrolling the page must update the active category**
+
+- When the Hair Cut section is in focus, Hair Cut must be active.
+- When the user scrolls into Hair Wash, Hair Wash must become active.
+- When the Colour section becomes the active visible section, Colour must become active.
+- Apply the same behavior to Treatments, Texture, Kérastase Rituals, Styling, and every other existing category.
+- Scrolling back upward must update the active category correctly.
+- The selected category must never remain incorrectly fixed on Hair Cut.
+
+Use an appropriate robust mechanism, such as IntersectionObserver combined with the existing scroll system. Do not depend entirely on click handlers.
+
+Account for the sticky header and filter bar when determining section visibility.
+
+**B. Clicking a category must scroll to its section**
+
+When the user taps or clicks any category:
+
+- Smoothly scroll to the correct service section.
+- Keep the section heading visible below the sticky header and filter bar.
+- Update the selected category immediately.
+- Prevent the scroll-position observer from temporarily selecting the wrong category during programmatic scrolling.
+- Ensure the active category remains correct after the scroll finishes.
+
+The All category must take the user to the beginning of the service list and become active appropriately.
+
+**C. Keep the active category visible in the filter row**
+
+If a category becomes active outside the visible horizontal portion of the filter bar, automatically scroll the filter row horizontally until the active chip is visible.
+
+Do not unexpectedly scroll the entire page horizontally.
+
+**D. Fix sticky positioning**
+
+The filter should remain visible while browsing the service list when appropriate.
+
+Set correct positioning, stacking order, top offset, background, and z-index so that:
+
+- The main header does not overlap the filter.
+- Section headings do not disappear beneath sticky UI.
+- Filter chips remain clickable.
+- The filter never jumps vertically while the page is scrolling.
+- There are no sudden layout shifts or flickering active states.
+
+Keep these behaviors consistent on mobile, tablet, and desktop.
+
+---
+
+## 3. REPAIR THE SERVICE CATEGORY IMAGES
+
+### Current problem
+
+The circular or rounded service-category thumbnails, particularly the Hair Cut image, appear incorrectly cropped. The subject and important parts of the photograph are cut off, making the category row look unfinished.
+
+### Required implementation
+
+Audit the image containers and their source images rather than applying one arbitrary CSS rule to every photograph.
+
+- Fix image aspect ratios and container dimensions.
+- Use appropriate object-fit and object-position values for each relevant image.
+- Adjust the focal point individually when a face, hairstyle, haircut, or salon activity is positioned off-center.
+- Keep the important subject and the actual haircut activity visible.
+- Avoid stretching, squashing, distortion, and excessive zooming.
+- Preserve the existing rounded or circular visual treatment.
+- Ensure borders, image masks, and parent overflow rules do not accidentally clip important content.
+- Maintain consistent thumbnail sizes, spacing, and alignment across Hair Cut, Hair Wash, Colour, Treatments, and other categories.
+- Use responsive image sizing so these images remain visually balanced across different screen widths.
+
+Do not replace the current images unless an existing source is genuinely broken or unusable. Prefer correcting the rendering of the existing assets.
+
+Visually inspect every category thumbnail after implementation, paying particular attention to Hair Cut.
+
+---
+
+## 4. MAKE ALL CAROUSELS AUTO-MOVE CONTINUOUSLY
+
+This requirement applies to the existing carousels, including:
+
+1. Popular Treatments
+2. Meet Our Stylists
+3. What Our Clients Say / Google Reviews
+4. The salon gallery or any other existing carousel that uses the same interaction pattern
+
+### Current problems
+
+- The cards move automatically in some sections, but stop when the cursor hovers over a photograph or card.
+- The left and right arrow buttons are visible but do not work.
+- Some carousels appear decorative rather than interactive.
+
+### A. Continuous automatic movement
+
+Make each relevant carousel move automatically and smoothly during normal use.
+
+Required behavior:
+
+- Autoplay must continue when the mouse cursor is over a photograph.
+- Autoplay must continue when the cursor is over a card or its text.
+- Hovering over the carousel must not pause its animation.
+- Pointer entry and exit must not trigger an unwanted pause.
+- Keyboard focus entering a card or carousel must not unexpectedly stop the animation.
+- Use a comfortable, consistent autoplay interval, approximately 4–5 seconds per card or slide where appropriate.
+- Use smooth transitions with natural easing.
+- Keep movement slow enough to read card titles, descriptions, prices, and review text.
+- Make the carousel loop seamlessly from the last item to the first item.
+- Avoid blank spaces, sudden jumps, visible reset frames, duplicated-card artifacts, and abrupt changes in direction.
+- Do not allow autoplay to interfere with button clicks, touch gestures, text selection, or navigation.
+
+The carousel must continue moving normally when the user places the cursor over it.
+
+Respect the operating system's reduced-motion accessibility preference, but do not use ordinary mouse hovering as a reason to pause autoplay.
+
+### B. Fully working previous and next buttons
+
+Repair every existing left and right arrow control.
+
+When the left arrow is clicked, the carousel must move to the previous item or position.
+
+When the right arrow is clicked, the carousel must move to the next item or position.
+
+Both buttons must work independently of autoplay and must continue working after repeated clicks.
+
+Requirements:
+
+- Correctly update the carousel position or active slide.
+- Handle the first and last items with proper looping behavior.
+- Allow repeated clicks without freezing.
+- Avoid racing conditions between autoplay and manual navigation.
+- Keep the active position and visible cards synchronized.
+- Use the actual carousel state rather than visually animating an unrelated decorative element.
+- Ensure the arrows have appropriate button semantics, accessible names, focus styles, and usable touch targets.
+
+For a multi-card carousel, advance by an appropriate card or group of cards depending on the existing layout. Do not unnecessarily show only one card at a time on desktop if the current design is intended to show multiple cards.
+
+### C. Mouse, touch, and trackpad support
+
+Where appropriate, support:
+
+- Horizontal mouse dragging.
+- Touch swiping on phones and tablets.
+- Trackpad scrolling.
+- Previous/next buttons.
+- Automatic movement.
+
+Dragging must not accidentally activate Book Now or + Add buttons inside a card.
+
+Use the existing carousel implementation where possible. If it is fundamentally broken, repair or replace only the carousel internals while preserving the existing card design and data.
+
+### D. Apply the fix consistently
+
+Do not repair only Popular Treatments.
+
+Verify autoplay and working arrow controls separately in Popular Treatments, Meet Our Stylists, Google Reviews, the salon gallery, and every other relevant carousel.
+
+Do not leave any visible carousel arrow as a decorative, nonfunctional button.
+
+---
+
+## 5. REDESIGN THE MOBILE BOTTOM NAVIGATION AS A FLOATING GLASS PILL
+
+This is a major visual and interaction upgrade.
+
+### Current problem
+
+The bottom navigation looks like a regular, flat, full-width bar. I want an elegant, pill-shaped, floating navigation dock with a smoothly sliding active indicator.
+
+Take inspiration from the refined floating navigation in Apple Music and from modern liquid-glass interfaces, but adapt it to Perfect Shine Salon.
+
+### A. Overall appearance
+
+Replace the flat mobile bottom bar with a floating capsule-style dock.
+
+Design requirements:
+
+- The entire navigation container should have a rounded pill or capsule shape.
+- It should have comfortable horizontal and vertical padding.
+- Use a clean translucent white or lightly tinted surface.
+- Add a restrained backdrop blur using backdrop-filter where supported.
+- Include a subtle, fine border and soft natural shadow.
+- Avoid excessive transparency that reduces text or icon readability.
+- Avoid neon glow, excessive gradients, flashy reflections, and distracting decoration.
+- Keep the result premium, lightweight, modern, and consistent with the existing salon brand.
+
+The whole navigation dock should look like one cohesive floating pill, not a rectangular bar containing three unrelated buttons.
+
+It should float slightly above the bottom screen edge with appropriate safe-area spacing.
+
+### B. Navigation items and active state
+
+Preserve the existing three destinations:
+
+- Home
+- Services
+- Contact Us
+
+Implement one clearly visible sliding pill-shaped selection indicator inside the dock.
+
+When Home is active:
+
+- The Home destination is highlighted.
+- The home icon and label use the active pink/red accent.
+- The other icons and labels remain neutral.
+
+When Services is active:
+
+- The same selection pill smoothly slides to Services.
+- The Services sparkle icon and label become pink/red.
+- Home and Contact Us return to their inactive styling.
+
+When Contact Us is active:
+
+- The pill moves to Contact Us.
+- The phone icon and label become pink/red.
+- The other destinations return to their inactive styling.
+
+Use the existing brand accent where available. If necessary, derive an appropriate pink/red accent from the current design, approximately #E91E63.
+
+The active icon should look intentionally selected through its stroke, fill, or available icon variant. Do not use a large glowing effect.
+
+### C. Smooth sliding animation
+
+The active selection must travel horizontally between destinations.
+
+Use a fluid spring-like transition with subtle acceleration, slight overshoot, and controlled settling.
+
+The animation must:
+
+- Start at the actual previous position.
+- Move toward the newly selected destination.
+- Settle precisely into its final position.
+- Avoid jitter, flashing, sudden jumps, or misaligned indicator widths.
+- Adapt correctly to different dock widths and text sizes.
+
+The indicator must remain inside the dock and never overlap the wrong destination after resizing.
+
+### D. Finger-driven dragging
+
+This requirement is essential.
+
+I want to be able to tap a navigation item, but I also want to press and hold the active pill with my finger, drag it horizontally toward another destination, and release it to select that destination.
+
+Implement genuine pointer/touch interaction rather than merely adding a slide animation to normal clicks.
+
+Required behavior:
+
+1. Tapping Home, Services, or Contact Us selects that destination.
+2. Pressing and dragging the sliding indicator horizontally moves it with the pointer or finger.
+3. Releasing over another destination selects the nearest valid destination.
+4. The indicator snaps smoothly into its final position after release.
+5. If the gesture is cancelled, the indicator returns to the appropriate valid position.
+6. The same interaction should work on touch devices and, where practical, with a mouse.
+7. Dragging must not cause accidental duplicate clicks or trigger the wrong navigation destination.
+8. Normal vertical page scrolling must remain usable; horizontal dock gestures must not disable the rest of the page's scrolling.
+9. Use pointer capture or an equivalent robust interaction mechanism where appropriate.
+10. Prevent the drag gesture from interfering with the browser's normal interactions outside the dock.
+
+Use real application navigation/state changes. The dock must not merely change the highlight while leaving the displayed page on the wrong destination.
+
+### E. Responsive behavior and content clearance
+
+- Add enough bottom padding or safe-area spacing so the dock never obscures important page content.
+- Keep the WhatsApp floating button separate from the navigation dock.
+- Prevent the dock and WhatsApp button from overlapping each other.
+- Check Android browser bottom insets and small screen heights.
+- Keep every label readable and every icon aligned.
+- Use appropriately sized touch targets.
+
+Retain the existing desktop header, logo, and horizontal desktop navigation. Do not create a duplicate navigation system. The desktop navigation's active state must remain synchronized with the same actual page or route.
+
+Where the bottom dock is displayed on tablet or other layouts, retain the same cohesive pill design and interaction behavior.
+
+---
+
+## 6. ADD REFINED RUBBERY SPRING ANIMATIONS
+
+I want the app to feel more alive and tactile, inspired by the restrained elastic movement seen in OnePlus ColorOS.
+
+The motion should feel fluid, responsive, and premium rather than exaggerated or cartoonish.
+
+### A. Initial application opening
+
+When the Home page first opens:
+
+- Bring the main content into view with a subtle fade and inward movement.
+- Let the hero section, heading, important text, buttons, images, and supporting cards enter in a carefully staggered sequence.
+- Elements may begin a little outside their final positions and settle into place using a restrained spring effect.
+- Apply slightly different but coordinated entrance timing to different groups.
+- Make important content readable immediately.
+- Avoid keeping the entire screen invisible during a long opening animation.
+
+The result should feel like the elements are smoothly assembling into their final layout.
+
+### B. Home, Services, and Contact Us transitions
+
+When moving between Home, Services, and Contact Us:
+
+- Animate the newly displayed section into position.
+- Use a combination of opacity, a small horizontal or vertical translation, and subtle scale.
+- Stagger major content groups so they do not all appear in one abrupt frame.
+- Give headings, hero content, images, action buttons, cards, and supporting information a coherent entrance sequence.
+- Use a spring-like settle effect with a slight elastic response.
+- Ensure the transition is repeatable and does not cause layout instability.
+
+For Services, animate the filter bar, section headings, service cards, photographs, and actions in a coordinated sequence.
+
+For Contact Us, animate the contact details, phone action, WhatsApp action, opening hours, directions, and existing contact-related content.
+
+For Home, focus on the hero, popular treatments, gallery, stylists, reviews, and other major existing sections.
+
+Do not force the full page to reload simply to achieve these transitions.
+
+### C. Book Now and service interactions
+
+Add subtle, responsive interaction animations to existing actions, including:
+
+- Book Now
+- + Add
+- Add-on controls
+- Service cards
+- Navigation items
+- Existing appointment panels or dialogs
+- Any existing booking drawer or bottom sheet
+
+Examples of appropriate motion:
+
+- A small spring scale response when a button is pressed.
+- A smooth entrance when a booking panel opens.
+- A controlled spring transition when a drawer or modal closes.
+- A subtle lift or shadow response when a desktop pointer hovers over a card.
+- A short settling movement when a new service becomes selected.
+
+Keep the animations quick enough that the interface always feels responsive.
+
+### D. Motion design constraints
+
+Use motion with purpose.
+
+- Avoid excessive bouncing, long delays, large rotations, flashing, aggressive zooming, and continuous decorative movement.
+- Avoid animation that pushes other content around or causes horizontal overflow.
+- Do not hide important content until an animation completes.
+- Prevent stale timers, repeated animation triggers, and memory leaks.
+- Do not reanimate the entire page unnecessarily on every small interaction.
+- Respect prefers-reduced-motion by providing shorter or disabled nonessential transitions.
+- Maintain keyboard accessibility and correct focus behavior.
+
+Prefer an existing motion library if the project already uses one. Otherwise, use lightweight CSS transitions, keyframes, or the native Web Animations API where appropriate.
+
+Do not add a large animation dependency just to animate a few components.
+
+---
+
+## 7. FIX TABLET AND DESKTOP RESPONSIVE FILTER LAYOUTS
+
+### Current problem
+
+The category filter works reasonably on mobile but looks inconsistent in tablet and desktop layouts.
+
+Some chips shift vertically, text becomes clipped, labels are not fully visible, and spacing is inconsistent. The same filter should look intentional at every viewport size.
+
+### Required behavior
+
+Make the category filter a stable, responsive horizontal row.
+
+- All category chips must remain properly aligned.
+- Chip text must remain fully visible.
+- Do not allow labels to wrap into two lines unexpectedly.
+- Avoid clipped words, clipped letters, partial chip borders, and vertical misalignment.
+- Keep chip heights consistent.
+- Use appropriate horizontal padding, gaps, line-height, and border radii.
+- Apply box-sizing consistently.
+- Remove conflicting fixed widths, absolute positioning, or inherited styles that cause the bar to break at particular breakpoints.
+- Do not force all chips to squeeze into a narrow row if there is insufficient space.
+
+For narrow phones and tablets, allow the filter row to scroll horizontally when necessary. Keep the active chip visible and prevent the webpage itself from developing unwanted horizontal overflow.
+
+For wider desktop layouts, display the chips in a stable, balanced row with consistent spacing. Centering the row is acceptable when it fits comfortably.
+
+On every breakpoint, ensure the filter remains correctly positioned below the header.
+
+Test the filter around these widths:
+
+320px, 360px, 390px, 430px, 768px, 820px, 1024px, 1280px, and 1440px.
+
+Include intermediate widths where wrapping or layout changes are likely to occur.
+
+---
+
+## 8. PRESERVE AND VERIFY EXISTING BOOKING AND CONTACT FUNCTIONALITY
+
+During implementation, audit the affected existing interactions.
+
+Ensure the existing functionality remains intact for:
+
+- Service category selection.
+- Service cards and their existing details.
+- + Add actions.
+- Book Now actions.
+- Appointment dialogs or booking forms.
+- Phone contact actions.
+- WhatsApp Booking.
+- Get Directions on Maps.
+- Back to top.
+- Existing desktop navigation.
+- Mobile bottom navigation.
+- Gallery controls.
+- Stylist carousel controls.
+- Review carousel controls.
+- Any existing social links or other visible call-to-action buttons.
+
+Do not replace real actions with decorative animations. The interface must perform the intended action as well as display the animation.
+
+Preserve actual configured URLs and telephone numbers. Never invent a new destination or business detail to make a button appear functional.
+
+If an existing control is already functional, retain its behavior while improving its visual feedback.
+
+---
+
+## 9. PERFORMANCE, ACCESSIBILITY, AND CODE QUALITY
+
+The application must remain lightweight and reliable.
+
+- Avoid unnecessary dependencies.
+- Avoid rendering the entire component tree on every animation frame.
+- Clean up timers, event listeners, observers, and animation resources when components unmount.
+- Use appropriate event handling for carousel autoplay and pointer-driven navigation.
+- Prefer transform and opacity animations where possible to reduce layout recalculation.
+- Avoid animating expensive layout properties unnecessarily.
+- Prevent horizontal overflow and cumulative layout shifts.
+- Keep existing loading behavior and image rendering efficient.
+- Provide visible keyboard-focus states.
+- Give icon-only buttons accessible labels.
+- Keep sufficient contrast between active/inactive navigation states and their backgrounds.
+- Preserve meaningful semantic elements and button behavior.
+- Respect reduced-motion preferences.
+- Check for React state synchronization issues, invalid keys, console warnings, and event-handler errors where applicable.
+
+Do not claim that performance or accessibility has improved without testing the affected implementation.
+
+---
+
+## 10. REQUIRED IMPLEMENTATION AND VERIFICATION PROCESS
+
+After making the changes, verify the actual running application.
+
+### Filter verification
+
+1. Open Services.
+2. Scroll from Hair Cut into Hair Wash.
+3. Continue to Colour, Treatments, Texture, Kérastase Rituals, and Styling.
+4. Confirm that the active filter updates to the currently viewed section.
+5. Scroll upward and confirm that the active state updates in reverse.
+6. Click a category and confirm that the correct section appears beneath the sticky header.
+7. Confirm that the filter bar remains aligned and readable on mobile, tablet, and desktop.
+
+### Carousel verification
+
+For Popular Treatments, Meet Our Stylists, Google Reviews, and every other applicable carousel:
+
+1. Confirm automatic movement begins normally.
+2. Place the cursor over the images and cards.
+3. Confirm that autoplay continues without pausing on hover.
+4. Click the right arrow repeatedly.
+5. Click the left arrow repeatedly.
+6. Confirm that the carousel moves in the correct direction each time.
+7. Verify the transitions at both ends of the carousel.
+8. Test touch swipe and manual navigation on a mobile-sized layout.
+9. Verify that carousel movement does not interfere with Book Now or + Add actions.
+
+### Navigation verification
+
+1. Tap Home, Services, and Contact Us.
+2. Confirm that the displayed content and active state change correctly.
+3. Check that the glass selection pill moves smoothly to the selected destination.
+4. Drag the pill with a pointer or finger to each destination.
+5. Release the drag and confirm that the correct destination is selected.
+6. Test interrupted gestures and repeated navigation.
+7. Confirm that the dock does not cover page content or interfere with the WhatsApp button.
+
+### Animation verification
+
+1. Open or reload the Home page.
+2. Verify its entrance sequence.
+3. Navigate to Services and check the transition.
+4. Navigate to Contact Us and check the transition.
+5. Open existing booking interfaces and test their animations.
+6. Confirm that animations are smooth and do not interrupt clicks, typing, scrolling, or navigation.
+7. Verify the reduced-motion behavior.
+
+### Responsive verification
+
+Inspect the application at mobile, tablet, and desktop widths, especially the widths listed in Section 7.
+
+Check for:
+
+- Clipped headings.
+- Cut-off category labels.
+- Broken filter rows.
+- Misaligned images.
+- Distorted service thumbnails.
+- Navigation overlap.
+- Incorrect sticky positioning.
+- Horizontal overflow.
+- Unusable carousel arrows.
+- WhatsApp/navigation overlap.
+- Content hidden under the bottom dock.
+
+### Technical verification
+
+- Run the appropriate existing build command.
+- Run available tests and lint checks.
+- Fix errors introduced by the changes.
+- Verify that the actual application renders successfully.
+- Inspect the browser console for relevant errors.
+- Confirm that existing business content, routes, and booking integrations remain intact.
+
+Do not claim a test passed unless it was actually run and its outcome checked.
+
+If a specific verification cannot be performed in the available environment, explicitly identify it rather than pretending that it passed.
+
+---
+
+## 11. FINAL ACCEPTANCE CRITERIA
+
+The work is complete only when all the following requirements are satisfied:
+
+- The service filter follows the visible service section and updates correctly in both scrolling directions.
+- Clicking category chips navigates to the correct section.
+- Hair Cut, Hair Wash, Colour, and other service thumbnails look correctly framed and are not badly cropped.
+- Popular Treatments, Meet Our Stylists, Google Reviews, and other relevant carousels continue autoplaying when the cursor hovers over their cards.
+- All applicable left and right arrow buttons genuinely work.
+- The mobile bottom navigation is a floating, pill-shaped glass dock rather than a flat, full-width bar.
+- The active navigation pill slides smoothly between Home, Services, and Contact Us.
+- Both tapping and finger/pointer dragging select the correct destination.
+- Active icons and labels use the correct pink/red accent.
+- The Home, Services, and Contact Us views have coordinated, restrained spring entrance animations.
+- Existing Book Now, + Add, phone, WhatsApp, maps, and other established actions remain functional.
+- The category filter is consistent and fully readable on mobile, tablet, and desktop.
+- No unnecessary libraries, broken routes, hidden content, major performance regressions, or avoidable console errors are introduced.
+- The existing project remains recognizable and maintains its current architecture and data.
+
+## 12. FINAL RESPONSE AFTER IMPLEMENTATION
+
+After completing the work, provide a concise engineering summary containing:
+
+1. The root causes identified.
+2. The components and files changed.
+3. The fixes implemented for scrolling, carousels, navigation, responsive layouts, and animations.
+4. The build, tests, and manual checks actually performed, along with their real results.
+5. Any remaining issue that could not be verified or completed.
+
+Do not merely repeat this prompt or provide another implementation plan. Make the code changes, verify the results, and report honestly what is complete.
